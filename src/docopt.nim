@@ -234,14 +234,14 @@ method flat(self: ParentPattern, types: varargs[string]): seq[Pattern] =
 method single_match(self: Argument, left: seq[Pattern]): SingleMatchResult =
   for n, pattern in left:
     if pattern.class == "Argument":
-      return (n, argument(self.name, pattern.value))
+      return (n, Pattern(argument(self.name, pattern.value)))
   raise new_exception(ValueError, "Not found")
 
 method single_match(self: Command, left: seq[Pattern]): SingleMatchResult =
   for n, pattern in left:
     if pattern.class == "Argument":
       if pattern.value.kind == vkStr and $pattern.value == self.name:
-        return (n, command(self.name, val(true)))
+        return (n, Pattern(command(self.name, val(true))))
       else:
         break
   raise new_exception(ValueError, "Not found")
